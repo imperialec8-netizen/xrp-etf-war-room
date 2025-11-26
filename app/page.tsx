@@ -1,4 +1,17 @@
 // app/page.tsx
+
+"use client";
+
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  ResponsiveContainer,
+} from "recharts";
+
 import { etfData } from "./etf-data";
 
 function formatUsd(n: number): string {
@@ -67,7 +80,33 @@ const leader: any = etfData.reduce(
 
         {/* Stat cards */}
         <section className="grid gap-4 md:grid-cols-3">
-          <div className="rounded-2xl border border-emerald-500/40 bg-slate-950/70 px-4 py-3 shadow-[0_0_30px_rgba(34,197,94,0.28)]">
+          {/* 📊 ETF FLOW CHART */}
+<div className="w-full h-[300px] col-span-3 my-6 rounded-xl border border-emerald-500/40 bg-slate-900/40 p-4 shadow-[0_0_30px_rgba(34,197,94,0.25)]">
+  <ResponsiveContainer width="100%" height="100%">
+    <LineChart
+      data={[
+        { day: "Mon", value: 10 },
+        { day: "Tue", value: 30 },
+        { day: "Wed", value: 45 },
+        { day: "Thu", value: 60 },
+        { day: "Fri", value: 80 },
+      ]}
+    >
+      <CartesianGrid strokeDasharray="3 3" stroke="#2dd4bf40" />
+      <XAxis dataKey="day" stroke="#9ca3af" />
+      <YAxis stroke="#9ca3af" />
+      <Tooltip />
+      <Line
+        type="monotone"
+        dataKey="value"
+        stroke="#10b981"
+        strokeWidth={3}
+        dot={{ r: 4 }}
+      />
+    </LineChart>
+  </ResponsiveContainer>
+</div>
+]"
             <p className="text-[0.7rem] uppercase tracking-[0.22em] text-slate-400">
               Total XRP Locked in ETFs
             </p>
