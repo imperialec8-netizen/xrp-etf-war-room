@@ -23,6 +23,14 @@ export default function Home() {
     0
   );
 
+// 1B XRP target + top ETF leader
+const targetXrp = 1_000_000_000;
+
+const leader: any = etfData.reduce(
+  (top: any, etf: any) => (etf.xrpLocked > (top?.xrpLocked ?? 0) ? etf : top),
+  etfData[0]
+);
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-black via-slate-950 to-emerald-900 text-slate-100">
       <div className="max-w-6xl mx-auto px-4 py-10 space-y-10">
@@ -63,26 +71,27 @@ export default function Home() {
             <p className="text-[0.7rem] uppercase tracking-[0.22em] text-slate-400">
               Total XRP Locked in ETFs
             </p>
-            <p className="mt-2 text-xl md:text-2xl font-semibold text-emerald-300">
-              {formatXrp(totalXrpLocked)}
-            </p>
-            <p className="mt-1 text-[0.7rem] text-slate-500">
-              These tokens are effectively{" "}
-              <span className="text-emerald-300 font-medium">off retail float</span>.
-            </p>
-          </div>
 
-          <div className="rounded-2xl border border-emerald-500/20 bg-slate-950/70 px-4 py-3">
-            <p className="text-[0.7rem] uppercase tracking-[0.22em] text-slate-400">
-              Total AUM (Spot XRP)
-            </p>
-            <p className="mt-2 text-xl md:text-2xl font-semibold text-emerald-200">
-              {formatUsd(totalAumUsd)}
-            </p>
-            <p className="mt-1 text-[0.7rem] text-slate-500">
-              First wave of institutional capital routed through regulated wrappers.
-            </p>
-          </div>
+          <p className="mt-2 text-xl md:text-2xl font-semibold text-emerald-300">
+  {formatXrp(totalXrpLocked)}
+</p>
+
+<p className="mt-1 text-[0.7rem] text-slate-500">
+  These tokens are effectively{" "}
+  <span className="text-emerald-300 font-medium">off retail float</span>.
+</p>
+
+<p className="mt-1 text-[0.65rem] text-slate-500">
+  Leader:{" "}
+  <span className="text-emerald-300 font-medium">{leader?.provider}</span>
+  {" • "}
+  Target:{" "}
+  <span className="text-emerald-300 font-medium">
+    {formatXrp(targetXrp)}
+  </span>
+</p>
+
+
 
           <div className="rounded-2xl border border-emerald-500/20 bg-slate-950/70 px-4 py-3">
             <p className="text-[0.7rem] uppercase tracking-[0.22em] text-slate-400">
