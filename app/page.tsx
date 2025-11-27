@@ -50,7 +50,7 @@ function useTrackerSnapshot(): TrackerSnapshot {
 
     async function pull() {
       try {
-        const res = await fetch(url, { cache: "no-store" });
+        const res = await fetch(url!, { cache: "no-store" });
         if (!res.ok) return;
 
         const data = await res.json();
