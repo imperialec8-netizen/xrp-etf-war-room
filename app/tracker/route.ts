@@ -1,37 +1,50 @@
 // app/api/tracker/route.ts
 import { NextResponse } from "next/server";
 
-const REMOTE_TRACKER_URL = "https://api.xrpinsights.vercel.app/tracker"; 
-// ^ use the exact URL from DevTools
+type TrackerSnapshot = {
+  priceUsd: number;
+  totalAumUsd: number;
+  totalXrpLocked: number;
+};
+
+// Local fallback if upstream is down or not configured
+const FALLBACK: TrackerSnapshot = {
+  priceUsd: 2.2177,
+  totalAumUsd: 778_220_000,
+  totalXrpLocked: 329_480_000,
+};
 
 export async function GET() {
+  const upstream = process.env.TRACKER_UPSTREAM_URL;
+
+  // If you haven’t set the real API yet, just return fallback
+  if (!upstream) {
+    return NextResponse.json(FALLBACK);
+  }
+
   try {
-    const res = await fetch(REMOTE_TRACKER_URL, {
-      cache: "no-store",
+    const res = await fetch(upstream, {
+      // revalidate every 60s on the server
+      next: { revalidate: 60 },
     });
 
     if (!res.ok) {
-      return NextResponse.json(
-        { error: "Upstream tracker error" },
-        { status: 502 }
-      );
+      throw new Error(`Tracker upstream status ${res.status}`);
     }
 
-    const data = await res.json();
+    const raw = await res.json();
 
-    // Optionally pick only the fields you care about:
-    const snapshot = {
-      priceUsd: data.priceUsd,
-      totalAumUsd: data.totalAumUsd,
-      totalXrpLocked: data.totalXrpLocked,
+    // Adjust these fields to match XRP-Insights JSON structure
+    const snapshot: TrackerSnapshot = {
+      priceUsd: raw.priceUsd ?? FALLBACK.priceUsd,
+      totalAumUsd: raw.totalAumUsd ?? FALLBACK.totalAumUsd,
+      totalXrpLocked: raw.totalXrpLocked ?? FALLBACK.totalXrpLocked,
     };
 
     return NextResponse.json(snapshot);
-  } catch (err) {
-    console.error("Tracker proxy failed:", err);
-    return NextResponse.json(
-      { error: "Tracker proxy failed" },
-      { status: 500 }
-    );
+  } catch (error) {
+    console.error("Tracker upstream failed:", error);
+    // Fail soft: still respond with fallback
+    return NextResponse.json(FALLBACK);
   }
 }
