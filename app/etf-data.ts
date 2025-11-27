@@ -1,3 +1,12 @@
+// --- Live Tracker Override Constants ---
+// These sync your War Room with the official XRP ETF Tracker stats.
+// Update these anytime the official tracker changes its totals.
+
+export const trackerXrpPriceUsd = 2.2260;            // Official: XRP price
+export const trackerTotalAumUsd = 778_220_000;        // Official: $778.22M AUM
+export const trackerTotalXrpLocked = 329_480_000;     // Official: 329.48M XRP locked
+
+
 export interface Etf {
   id: string;
   provider: string;
@@ -80,7 +89,7 @@ export const etfData: Etf[] = [
     id: "bitwise-xrpx",
     provider: "Bitwise",
     fundName: "Bitwise XRP Trust",
-    ticker: "XRPB", // ✅ ticker fixed
+    ticker: "XRP", // ✅ ticker fixed
     category: "Spot",
     status: "Active",
     exchange: "NYSE Arca",
