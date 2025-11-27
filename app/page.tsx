@@ -272,7 +272,7 @@ export default function Home() {
                   { day: "Wed", value: 45 },
                   { day: "Thu", value: 60 },
                   { day: "Fri", value: 80 },
-                ]}
+               ]}   
               >
                 <CartesianGrid strokeDasharray="3 3" stroke="#2dd4bf40" />
                 <XAxis dataKey="day" stroke="#9ca3af" />
