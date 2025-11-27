@@ -27,7 +27,10 @@ export default function TrackerClient({ initialSnapshot }: Props) {
 
   // 🔄 Client-side refresh from /api/tracker
   useEffect(() => {
-    const upstream = process.env.NEXT_PUBLIC_TRACKER_API_URL;
+    // This is replaced at build-time with "/api/tracker"
+    const upstream =
+      process.env.NEXT_PUBLIC_TRACKER_API_URL ?? "/api/tracker";
+
     if (!upstream) return;
 
     async function refresh() {
@@ -47,10 +50,8 @@ export default function TrackerClient({ initialSnapshot }: Props) {
       }
     }
 
-    // initial refresh + interval
     refresh();
     const id = setInterval(refresh, 60_000); // every 60s
-
     return () => clearInterval(id);
   }, []);
 
@@ -76,7 +77,7 @@ export default function TrackerClient({ initialSnapshot }: Props) {
       {/* 📈 MAIN CHART (still using etfData) */}
       <section className="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
         <h2 className="mb-4 text-lg font-medium">
-          XRP ETF Flow & Price – War Room View
+          XRP ETF Flow &amp; Price – War Room View
         </h2>
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
