@@ -14,13 +14,14 @@ const FALLBACK: TrackerSnapshot = {
 };
 
 export async function GET() {
-  const upstream = process.env.TRACKER_UPSTREAM_URL;
-
-  if (!upstream) {
-    return NextResponse.json(FALLBACK);
-  }
-
   try {
+    const upstream = process.env.TRACKER_UPSTREAM_URL;
+
+    // If no upstream is set, just return fallback
+    if (!upstream) {
+      return NextResponse.json(FALLBACK);
+    }
+
     const res = await fetch(upstream, { next: { revalidate: 60 } });
 
     if (!res.ok) {
